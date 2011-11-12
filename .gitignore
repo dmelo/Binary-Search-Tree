@@ -1,3 +1,3 @@
-src/data
-src/bst
-src/randfile
+data
+bin/bst
+bin/randfile
