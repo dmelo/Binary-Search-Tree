@@ -1,6 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+/**
+ * ./randfile 100 output 100 and then the numbers from 0 to 99 randomly sorted.
+ **/
 int main(int argc, char **argv) {
     int num, i, *used, aux;
 
@@ -13,7 +16,7 @@ int main(int argc, char **argv) {
         do {
             aux = rand();
             aux %= num;
-        } while(used[aux] != 0);
+        } while(used[aux]);
         printf("%d\n", aux);
         used[aux] = 1;
     }
