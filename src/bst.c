@@ -4,14 +4,14 @@
 
 struct node {
     int value;
-    struct node *right;
     struct node *left;
+    struct node *right;
 };
 
 struct node *newNode(int value) {
     struct node *n = (struct node *) calloc(1, sizeof(struct node));
     n->value = value;
-    n->right = n->left = NULL;
+    n->left = n->right = NULL;
 
     return n;
 }
@@ -30,6 +30,15 @@ void insert(struct node* root, int value) {
         else 
             root->left = newNode(value);
     }
+}
+
+struct node *search(struct node *root, int value) {
+    if(value == root->value)
+        return root;
+    else if(value < root->value)
+        return root->left ? search(root->left, value): NULL;
+    else // value > root->value
+        return root->right ? search(root->right, value): NULL;
 }
 
 void printInOrder(struct node* root) {
