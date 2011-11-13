@@ -1,3 +1,4 @@
 data
 bin/bst
 bin/randfile
+bin/genhist

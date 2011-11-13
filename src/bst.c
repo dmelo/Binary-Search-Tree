@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 struct node {
     int value;
@@ -58,22 +59,32 @@ int height(struct node* root, int h) {
 }
 
 
-int main() {
+int main(int argc, char **argv) {
     int num, i, aux;
     struct node root;
+    FILE *fd, *fout;
+    char namefout[1000];
     root.right = root.left = NULL;
 
-    scanf(" %d ", &num);
+    fd = fopen(argv[1], "r");
+
+    fscanf(fd, " %d ", &num);
     for(i = 0; i < num; i++) {
-        scanf(" %d ", &aux);
-        printf("Inserting %d...\n", i);
+        fscanf(fd, " %d ", &aux);
+        if(0 == i % 100000)
+            printf("Inserting %d from %s...\n", i, argv[1]);
+
         if(0 == i)
             root.value = aux;
         else
             insert(&root, aux);
     }
+    fclose(fd);
 
-    printf("%d\n", height(&root, 0));
+    strcpy(namefout, argv[1]);
+    strcat(namefout, ".out");
+    fout = fopen(namefout, "w");
+    fprintf(fout, "%d\n", height(&root, 0));
 
     return 0;
 }
