@@ -120,14 +120,9 @@ int delete(struct node *root, int value) {
                 else
                     nodeParent->right = node->left ? node->left: node->right;
             }
-            else {
-                if(node->left)
-                    root = root->left;
-                else
-                    root = root->right;
-            }
+            else
+                root = node->left ? root->left: root->right;
             free(node);
-
             break;
         case 2:
             nodeAux = findMost(node->right, LEFT);

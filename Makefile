@@ -1,6 +1,6 @@
 CFLAGS=-g -O0
 
-all: bin/randfile bin/bst bin/genhist bin/randoperations
+all: bin/randfile bin/bst bin/genhist bin/randomoperations
 
 bin/randfile: src/randfile.c
 	gcc ${CFLAGS} src/randfile.c -o bin/randfile
@@ -11,5 +11,5 @@ bin/bst: src/bst.c
 bin/genhist: src/genhist.c
 	gcc ${CFLAGS} src/genhist.c -o bin/genhist
 
-bin/randoperations: src/randoperations.c
-	gcc ${CFLAGS} src/randoperations.c -o bin/randoperations
+bin/randomoperations: src/randomoperations.c
+	gcc ${CFLAGS} src/randomoperations.c -o bin/randomoperations
