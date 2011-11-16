@@ -23,7 +23,7 @@ struct node *newNode(int value) {
 
 int insert(struct node* root, int value) {
     struct node *n;
-    if(root->value == 0) 
+    if(!root->value) 
         root->value = value;
     else {
         if(value == root->value)
@@ -57,22 +57,12 @@ struct node *search(struct node *root, int value) {
 struct node *searchParent(struct node *root, int value) {
     if(value == root->value)
         return NULL;
-    else if(value < root->value) {
-        if(!root->left)
-            return NULL;
-        else if(root->left->value == value)
-            return root;
-        else
-            return searchParent(root->left, value);
-    }
-    else if(value > root->value) {
-        if(!root->right)
-            return NULL;
-        else if(root->right->value == value)
-            return root;
-        else
-            return searchParent(root->right, value);
-    }
+    else if(value < root->value && root->left)
+        return root->left->value == value ? root: searchParent(root->left, value);
+    else if(value > root->value && root->right)
+        return root->right->value == value ? root: searchParent(root->right, value);
+
+    return NULL;
 }
 
 struct node *findMost(struct node *root, int direction) {
@@ -82,54 +72,32 @@ struct node *findMost(struct node *root, int direction) {
         return root->right ? findMost(root->right, direction): root;
 }
 
-int numOfChild(struct node *root) {
-    int num = 0;
-    if(root->left)
-        num++;
-    if(root->right)
-        num++;
-
-    return num;
-}
-
 int delete(struct node *root, int value) {
     struct node *node, *nodeParent, *nodeAux;
-    int aux;
+    int aux, nChild;
 
     node = search(root, value);
     if(!node)
         return ERROR;
-    nodeParent = searchParent(root, value);
 
-    switch(numOfChild(node)) {
-        case 0:
-            if(nodeParent) {
-                if(nodeParent->right && nodeParent->right->value == node->value)
-                    nodeParent->right = NULL;
-                else
-                    nodeParent->left = NULL;
-                free(node);
-            }
-            else 
-                node->value = 0;
-            break;
-        case 1:
-            if(nodeParent) {
-                if(nodeParent->left && nodeParent->left->value == node->value)
-                    nodeParent->left = node->left ? node->left: node->right;
-                else
-                    nodeParent->right = node->left ? node->left: node->right;
-            }
+    nChild = node->left && node->right ? node->left || node->right ? 2 : 1 : 0;
+    if(nChild < 2) {
+        nodeParent = searchParent(root, value);
+        if(nodeParent) {
+            if(nodeParent->left && nodeParent->left->value == node->value)
+                nodeParent->left = nChild ? node->left ? node->left : node->right : NULL;
             else
-                root = node->left ? root->left: root->right;
-            free(node);
-            break;
-        case 2:
-            nodeAux = findMost(node->right, LEFT);
-            aux = nodeAux->value;
-            delete(node, aux);
-            node->value = aux;
-            break;
+                nodeParent->right = nChild ? node->left ? node->left : node->right : NULL;
+        }
+        else
+            node->value = 0;
+        free(node);
+    }
+    else {
+        nodeAux = findMost(node->right, LEFT);
+        aux = nodeAux->value;
+        delete(node, aux);
+        node->value = aux;
     }
 
     return SUCCESS;
