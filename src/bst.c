@@ -7,12 +7,20 @@
 #define LEFT 2
 #define RIGHT 3
 
+/**
+ * Node structure. Here, it is possible to add more data. E.g, if each node 
+ * represents a user, then we can add data regarding his/her name, gender, 
+ * birth date and so on.
+ */
 struct node {
     int value;
     struct node *left;
     struct node *right;
 };
 
+/**
+ * Allocates memory a new node and fill it's key with the proper value.
+ */
 struct node *newNode(int value) {
     struct node *n = (struct node *) calloc(1, sizeof(struct node));
     n->value = value;
@@ -21,6 +29,9 @@ struct node *newNode(int value) {
     return n;
 }
 
+/**
+ * Insert a new node on the tree if the value is not already stored.
+ */
 int insert(struct node* root, int value) {
     struct node *n;
     if(!root->value) 
@@ -45,6 +56,9 @@ int insert(struct node* root, int value) {
     return SUCCESS;
 }
 
+/**
+ * search for a value on the tree.
+ */
 struct node *search(struct node *root, int value) {
     if(value == root->value)
         return root;
@@ -54,6 +68,9 @@ struct node *search(struct node *root, int value) {
         return root->right ? search(root->right, value): NULL;
 }
 
+/**
+ * Gets the pointer to the parent of a specific value if it exists.
+ */
 struct node *searchParent(struct node *root, int value) {
     if(value == root->value)
         return NULL;
@@ -65,6 +82,9 @@ struct node *searchParent(struct node *root, int value) {
     return NULL;
 }
 
+/**
+ * Find the greatest or the smallest son of a given node.
+ */
 struct node *findMost(struct node *root, int direction) {
     if(direction == LEFT) 
         return root->left ? findMost(root->left, direction): root;
@@ -72,6 +92,9 @@ struct node *findMost(struct node *root, int direction) {
         return root->right ? findMost(root->right, direction): root;
 }
 
+/**
+ * Delete a node from the tree.
+ */
 int delete(struct node *root, int value) {
     struct node *node, *nodeParent, *nodeAux;
     int aux, nChild;
@@ -103,6 +126,9 @@ int delete(struct node *root, int value) {
     return SUCCESS;
 }
 
+/**
+ * Print the tree structure.
+ */
 void printTree(struct node* root, int height) {
     int i;
 
@@ -116,27 +142,30 @@ void printTree(struct node* root, int height) {
 }
 
 void printInOrder(struct node* root) {
-    if(NULL != root->left)
+    if(root->left)
         printInOrder(root->left);
     printf("%d ", root->value);
-    if(NULL != root->right)
+    if(root->right)
         printInOrder(root->right);
 }
 
 void printPreOrder(struct node* root) {
     printf("%d ", root->value);
-    if(NULL != root->left)
+    if(root->left)
         printInOrder(root->left);
-    if(NULL != root->right)
+    if(root->right)
         printInOrder(root->right);
 }
 
+/**
+ * Calculate the tree's height.
+ */
 int height(struct node* root, int h) {
     int aux_left = 0;
     int aux_right = 0;
 
-    aux_left  = NULL != root->left  ? height(root->left , h + 1) : 0;
-    aux_right = NULL != root->right ? height(root->right, h + 1) : 0;
+    aux_left  = root->left  ? height(root->left , h + 1) : 0;
+    aux_right = root->right ? height(root->right, h + 1) : 0;
 
     return aux_left || aux_right ? aux_left > aux_right ? aux_left : aux_right : h + 1;
 }
