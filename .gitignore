@@ -3,3 +3,4 @@ bin/bst
 bin/randfile
 bin/genhist
 bin/randomoperations
+*.swp
