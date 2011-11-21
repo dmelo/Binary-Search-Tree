@@ -212,10 +212,7 @@ int main(int argc, char **argv) {
                 delete(root, num) == SUCCESS ? printf("DELETED\n") : printf("NOT DELETED\n");
                 break;
             case 'p':
-                if(0 == num)
-                    printTree(root, 0);
-                else
-                    printOrder(root, num);
+                num ? printOrder(root, 0) : printTree(root, 0);
                 break;
             default:
                 printf("error: command not found!\n");
