@@ -6,6 +6,9 @@
 #define ERROR 1
 #define LEFT 2
 #define RIGHT 3
+#define PRE_ORDER 1
+#define IN_ORDER 2
+#define POST_ORDER 3
 
 /**
  * Node structure. Here, it is possible to add more data. E.g, if each node 
@@ -141,20 +144,20 @@ void printTree(struct node* root, int height) {
     }
 }
 
-void printInOrder(struct node* root) {
+/**
+ * Print the tree values in pre, in or post order.
+ */
+void printOrder(struct node *root, int order) {
+    if(PRE_ORDER == order)
+        printf("%d ", root->value);
     if(root->left)
-        printInOrder(root->left);
-    printf("%d ", root->value);
+        printOrder(root->left, order);
+    if(IN_ORDER == order)
+        printf("%d ", root->value);
     if(root->right)
-        printInOrder(root->right);
-}
-
-void printPreOrder(struct node* root) {
-    printf("%d ", root->value);
-    if(root->left)
-        printInOrder(root->left);
-    if(root->right)
-        printInOrder(root->right);
+        printOrder(root->right, order);
+    if(POST_ORDER == order)
+        printf("%d ", root->value);
 }
 
 /**
@@ -174,7 +177,8 @@ int height(struct node* root, int h) {
  * i NUM -- insert number NUM, e.g. "i 10"
  * s NUM -- search for number NUM, e.g. "s 13"
  * d NUM -- delete number NUM, e.g. "d 15"
- * p -- print the tree
+ * p NUM -- 0 for printing the tree struct. 1, 2 or 3 for printing the numbers
+ *       -- in pre, in or post order, respectively.
  **/
 int main(int argc, char **argv) {
     int num, i, aux;
@@ -208,7 +212,10 @@ int main(int argc, char **argv) {
                 delete(root, num) == SUCCESS ? printf("DELETED\n") : printf("NOT DELETED\n");
                 break;
             case 'p':
-                printTree(root, 0);
+                if(0 == num)
+                    printTree(root, 0);
+                else
+                    printOrder(root, num);
                 break;
             default:
                 printf("error: command not found!\n");
